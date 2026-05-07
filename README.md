@@ -1,4 +1,4 @@
-# iCal Parser
+# iCal Scraper
 
 A Python project for parsing iCalendar files.
 
