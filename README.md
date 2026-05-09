@@ -26,7 +26,7 @@ Enter your credentials when prompted and let the script work.
 Once `ade_exports.json` is generated, use the `resourceId` value from each entry to build an iCal link like:
 
 ```text
-https://ade-consult.univ-artois.fr/jsp/custom/modules/plannings/anonymous_cal.jsp?resources={resourceId}&projectId=3&calType=ical
+https://ade-consult.univ-artois.fr/jsp/custom/modules/plannings/anonymous_cal.jsp?resources=7694&projectId=3&calType=ical
 ```
 
 In this example, `resources=7694` is the `resourceId` taken directly from `ade_exports.json`.
