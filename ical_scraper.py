@@ -23,18 +23,18 @@ def _load_config():
 
 
 async def _attempt_cas_login(page, cas_username: str, cas_password: str, headless: bool):
-    print("Tentative de connexion CAS automatique...")
+    print("Attempting automatic CAS login...")
     try:
         await page.wait_for_selector(
             "input[name='username'], input#username, input[type='email'], input[name='login']",
             timeout=5000,
         )
     except Exception:
-        print("Formulaire CAS non détecté automatiquement.")
+        print("CAS form not auto-detected.")
         if not headless:
-            print("Le navigateur est ouvert. Connecte-toi manuellement via CAS, puis appuie sur Entrée dans ce terminal.")
+            print("Browser is open. Please log in manually via CAS, then press Enter in this terminal.")
             loop = asyncio.get_event_loop()
-            await loop.run_in_executor(None, input, "Appuie sur Entrée après connexion...\n")
+            await loop.run_in_executor(None, input, "Press Enter after logging in...\n")
         return
 
     usr_sel = None
@@ -72,11 +72,11 @@ async def _attempt_cas_login(page, cas_username: str, cas_password: str, headles
         except Exception:
             pass
     else:
-        print("Champs utilisateur/mot de passe non détectés.")
+        print("Username/password fields not detected.")
         if not headless:
-            print("Connecte-toi manuellement dans la fenêtre du navigateur, puis appuie sur Entrée dans ce terminal.")
+            print("Please log in manually in the browser window, then press Enter in this terminal.")
             loop = asyncio.get_event_loop()
-            await loop.run_in_executor(None, input, "Appuie sur Entrée après connexion...\n")
+            await loop.run_in_executor(None, input, "Press Enter after logging in...\n")
 
 
 async def _get_participants_frame(page, timeout: int):
@@ -106,7 +106,7 @@ async def _open_root_category(frame):
 async def _collect_tree_resources(page, timeout: int, max_steps: int, click_delay_ms: int):
     frame = await _get_participants_frame(page, timeout)
     if not frame:
-        raise RuntimeError("Frame 'participants' introuvable")
+        raise RuntimeError("Frame 'participants' not found")
 
     await _open_root_category(frame)
     await page.wait_for_timeout(click_delay_ms)
@@ -253,12 +253,12 @@ async def scrape(
                 cas_password = getpass.getpass("CAS password: ")
                 await _attempt_cas_login(page, cas_username, cas_password, headless)
             else:
-                print("Le navigateur est ouvert. Connecte-toi manuellement via CAS dans la fenêtre du navigateur.")
-                print("Quand la connexion est terminée, appuie sur Entrée dans ce terminal pour continuer.")
+                print("Browser is open. Please log in manually via CAS in the browser window.")
+                print("When login is complete, press Enter in this terminal to continue.")
                 loop = asyncio.get_event_loop()
-                await loop.run_in_executor(None, input, "Appuie sur Entrée après connexion...\n")
+                await loop.run_in_executor(None, input, "Press Enter after logging in...\n")
 
-        print("Parcours de l'arbre 'Emplois du temps' et collecte des resourceId...")
+        print("Traversing the schedule tree and collecting resourceIds...")
         results = await _collect_tree_resources(
             page,
             timeout=timeout,
